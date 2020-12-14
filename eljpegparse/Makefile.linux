@@ -1,0 +1,16 @@
+CC = gcc
+CFLAGS=-Wall -g
+CLIB=-L /usr/lib
+CINC=-I/usr/include
+
+
+C_SOURCES =             \
+    jpegdump.c
+
+all: $(C_SOURCES)
+	$(CC) $(CFLAGS) $(C_SOURCES) $(CLIB) $(CINC) -o jpegparse.exe
+#     2>&1 
+#    | tee build.log
+
+clean:
+	/bin/rm -f *.o jpegparse.exe jpegparse

@@ -1,0 +1,12 @@
+CC = gcc
+CFLAGS=-Wall -g
+CLIB=
+
+C_SOURCES = 		\
+	elcut.c
+
+all: $(C_SOURCES)
+	$(CC) $(CFLAGS) $(C_SOURCES) $(CLIBS) -o elcut.exe
+
+clean:
+	/bin/rm -f *.o elcut.exe
