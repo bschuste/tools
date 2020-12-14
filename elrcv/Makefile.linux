@@ -1,0 +1,16 @@
+CC = gcc
+CFLAGS=-Wall -g
+CLIB=-L /usr/lib -lpthread
+CINC=-I/usr/include
+
+
+C_SOURCES =             \
+    udp_rcv.c
+
+all: $(C_SOURCES)
+	$(CC) $(CFLAGS) $(C_SOURCES) $(CLIB) $(CINC) -o udp_rcv.exe
+#     2>&1 
+#    | tee build.log
+
+clean:
+	/bin/rm -f *.o udp_rcv.exe udp_rcv
