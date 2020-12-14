@@ -1,0 +1,19 @@
+CC = gcc
+CFLAGS=-Wall -g 
+CLIBS= -B /usr/lib/w32api libws2_32.a
+#libws2_32.a
+CINC = -I../inc
+
+H_SOURCES =			    \
+	../inc/viSdefs.h    \
+	../inc/viSerror.h   \
+	../inc/viSstruct.h
+
+C_SOURCES = 		\
+	udp_snd.c
+
+all: $(C_SOURCES)
+	$(CC) $(CFLAGS) $(C_SOURCES) $(CLIBS) $(CINC) -o udp_snd 2>&1 | tee build.log
+
+clean:
+	/bin/rm -f *.o udp_snd.exe udp_snd

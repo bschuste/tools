@@ -1,0 +1,57 @@
+[Config]
+Relative path=1
+Compilator.SaveAll=0
+Compilator.Capture=0
+Compilator.HideOutput=0
+Compilator.LogType=0
+DefaultCPIndex=0
+LogtoEnd=1
+DontOpen=0
+FileFormat=0
+[Project tree]
+elsip
+	+elsip
+		elsip.c
+		elsip.exe
+		elSipClient.c
+		elSipFiles.c
+		elSipServer.c
+		elSipUa.h
+		elSipUaPrivate.h
+		Makefile
+[Open project files]
+0=Nouveau1.txt
+1=Makefile
+2=elSipUaPrivate.h
+3=elSipUa.h
+4=elSipServer.c
+5=..\elrcv\udp_rcv.c
+6=..\..\Customers\Alcatel-Lucent\Projet Integration Video\test.sdp
+7=..\elsnd\udp_snd.c
+[Selected Project Files]
+Main=
+Selected=..\elsnd\udp_snd.c
+[Nouveau1.txt]
+TopLine=1
+Caret=1,1
+[Makefile]
+TopLine=1
+Caret=1,1
+[elSipUaPrivate.h]
+TopLine=1
+Caret=1,1
+[elSipUa.h]
+TopLine=1
+Caret=1,1
+[elSipServer.c]
+TopLine=262
+Caret=3,300
+[..\elrcv\udp_rcv.c]
+TopLine=168
+Caret=1,122
+[..\..\Customers\Alcatel-Lucent\Projet Integration Video\test.sdp]
+TopLine=1
+Caret=196,9
+[..\elsnd\udp_snd.c]
+TopLine=160
+Caret=41,163
