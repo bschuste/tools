@@ -1,0 +1,12 @@
+CC = gcc
+CFLAGS=-Wall -Werr
+CLIB=
+
+C_SOURCES = 		\
+     bmp2yuv.c
+
+all: $(C_SOURCES)
+	$(CC) $(CFLAGS) $(C_SOURCES) $(CLIBS) -o b2y
+
+clean:
+	/bin/rm -f *.o b2y

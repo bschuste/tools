@@ -1,0 +1,12 @@
+CC = gcc
+CFLAGS=-Wall -g -I../inc
+CLIB=
+
+C_SOURCES = 		\
+     bmp2argb.c
+
+all: $(C_SOURCES)
+	$(CC) $(CFLAGS) $(C_SOURCES) $(CLIBS) -o bmp2argb.exe
+
+clean:
+	/bin/rm -f *.o bmp2argb.exe

@@ -1,0 +1,12 @@
+CC = gcc
+CFLAGS=-Wall -g -I../inc
+CLIB=
+
+C_SOURCES = 		\
+     bmp2yuv422planar.c
+
+all: $(C_SOURCES)
+	$(CC) $(CFLAGS) $(C_SOURCES) $(CLIBS) -o b2yplanar.exe
+
+clean:
+	/bin/rm -f *.o b2yplanar.exe
