@@ -1,44 +1,7 @@
-h264parse.c:221:1: warning: "True" redefined
-In file included from h264parse.c:35:
-../inc/viSportab.h:54:1: warning: this is the location of the previous definition
-h264parse.c:222:1: warning: "False" redefined
-../inc/viSportab.h:53:1: warning: this is the location of the previous definition
-h264parse.c: In function `tigFileGetByte':
-h264parse.c:313: warning: long int format, int arg (arg 3)
-h264parse.c:313: warning: long int format, int arg (arg 3)
-h264parse.c: In function `read_bits':
-h264parse.c:421: warning: long int format, int arg (arg 3)
-h264parse.c:421: warning: long int format, int arg (arg 3)
-h264parse.c:422: warning: long int format, int arg (arg 3)
-h264parse.c:422: warning: long int format, int arg (arg 3)
-h264parse.c:430: warning: long unsigned int format, unsigned int arg (arg 3)
-h264parse.c:430: warning: long unsigned int format, unsigned int arg (arg 3)
-h264parse.c:431: warning: long unsigned int format, unsigned int arg (arg 3)
-h264parse.c:431: warning: long unsigned int format, unsigned int arg (arg 3)
-h264parse.c:432: warning: long int format, int arg (arg 3)
-h264parse.c:432: warning: long int format, int arg (arg 3)
-h264parse.c:434: warning: long unsigned int format, unsigned int arg (arg 3)
-h264parse.c:434: warning: long unsigned int format, unsigned int arg (arg 3)
-h264parse.c: In function `tigFileGetExpGolomb':
-h264parse.c:518: warning: long unsigned int format, unsigned int arg (arg 3)
-h264parse.c:518: warning: long unsigned int format, unsigned int arg (arg 3)
-h264parse.c:519: warning: long unsigned int format, unsigned int arg (arg 3)
-h264parse.c:519: warning: long unsigned int format, unsigned int arg (arg 3)
-h264parse.c:535: warning: long unsigned int format, unsigned int arg (arg 3)
-h264parse.c:535: warning: long unsigned int format, unsigned int arg (arg 3)
-h264parse.c:536: warning: long unsigned int format, unsigned int arg (arg 3)
-h264parse.c:536: warning: long unsigned int format, unsigned int arg (arg 3)
-h264parse.c:537: warning: long unsigned int format, unsigned int arg (arg 3)
-h264parse.c:537: warning: long unsigned int format, unsigned int arg (arg 3)
-h264parse.c:542: warning: long int format, int arg (arg 3)
-h264parse.c:542: warning: long int format, int arg (arg 3)
-h264parse.c:543: warning: long int format, int arg (arg 3)
-h264parse.c:543: warning: long int format, int arg (arg 3)
-h264parse.c:551: warning: long unsigned int format, unsigned int arg (arg 3)
-h264parse.c:551: warning: long unsigned int format, unsigned int arg (arg 3)
-h264parse.c:552: warning: long unsigned int format, unsigned int arg (arg 3)
-h264parse.c:552: warning: long unsigned int format, unsigned int arg (arg 3)
-h264parse.c:553: warning: long unsigned int format, unsigned int arg (arg 3)
-h264parse.c:553: warning: long unsigned int format, unsigned int arg (arg 3)
-h264parse.c:555: warning: long int format, int arg (arg 3)
-h264parse.c:555: warning: long int format, int arg (arg 3)
+h264parse.c: In function ‘elFileScan’:
+h264parse.c:783:26: warning: variable ‘nal_ref_idc’ set but not used [-Wunused-but-set-variable]
+  783 |     UInt8 forbidden_bit, nal_ref_idc;
+      |                          ^~~~~~~~~~~
+h264parse.c:783:11: warning: variable ‘forbidden_bit’ set but not used [-Wunused-but-set-variable]
+  783 |     UInt8 forbidden_bit, nal_ref_idc;
+      |           ^~~~~~~~~~~~~

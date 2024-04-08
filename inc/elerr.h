@@ -34,12 +34,14 @@
 typedef enum elErrorCode 
 {
     EL_OK                           = 0,
+    EL_EOF,
+    EL_ERR_OPEN_FILE,
     EL_ERR_MALLOC,
     EL_ERR_BAD_PARAMETER,
     EL_ERR_PTHREAD,
     EL_ERR_SIP_CLIENT_SOCKET,
     EL_ERR_COMP_UNIQUE_START,
-    
+    EL_ERR_EOF,
     EL_ERR_MAX
 } elErrorCode_t;
 

@@ -50,7 +50,8 @@
 
 #define FALSE		0
 #define TRUE		1
+#if !__bool_true_false_are_defined
 #define False		FALSE
 #define True		TRUE
-
+#endif
 #endif

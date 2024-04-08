@@ -54,8 +54,10 @@
 
 #define FALSE       0
 #define TRUE        1
-#define False       FALSE
-#define True        TRUE
+#if !__bool_true_false_are_defined
+#define False		FALSE
+#define True		TRUE
+#endif
 
 #ifndef __TCS__
 #define UCLIPU(x,y) ((x)>(y)?(y):(x))

@@ -1,6 +1,6 @@
 /***********************************************************************
  **
-   Copyright (c) Electropix 2002-2009.
+   Copyright (c) Electropix 2002-2022.
    All rights reserved. Reproduction in whole or in part is prohibited
    without the written consent of the copyright holder.
 
@@ -32,9 +32,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#include "viSportab.h"
-#include "viSdefs.h"
-#include "viSerror.h"
+#include <stdbool.h>
+#include "elportab.h"
+#include "eldefs.h"
+#include "elerr.h"
 
 /*!*********************************************************************
  ** NALU types
@@ -218,8 +219,6 @@ typedef struct {
 #define SCAN_LIMIT        10 * 1024 * 1024
 #define PIC_LIMIT         4
 #define MIN_SC_FOUND      100
-#define True              1
-#define False             0
 #define LEVEL1            1
 #define LEVEL0            0
 #define LOG_MAX_SIZE      4096
@@ -278,7 +277,7 @@ typedef struct
     picParSet_t  pps;
 } session_t, *session_p;
 
-viSerror elFileInitBufManager(bufManager_p buf_p, UInt8* pu8Buf) {
+elErrorCode_t elFileInitBufManager(bufManager_p buf_p, UInt8* pu8Buf) {
 
 	buf_p->buf         = pu8Buf;
     buf_p->fp          = Null;
@@ -286,22 +285,22 @@ viSerror elFileInitBufManager(bufManager_p buf_p, UInt8* pu8Buf) {
 	buf_p->bc          = buf_p->max; /* buffer is empty */
 	buf_p->byteCounter = 0;  /* Is currently an Int32 should we use a Double? */
 
-    return VIS_OK;
+    return EL_OK;
 }
 
 //! Get next byte from the file using temporary buffer
-viSerror elFileInitBuffer(bufManager_p buf_p) {
+elErrorCode_t elFileInitBuffer(bufManager_p buf_p) {
 
 	buf_p->max = 0;
 	buf_p->bc  = buf_p->max; /* buffer is empty */
     buf_p->avail_bits = 0;
-    return VIS_OK;
+    return EL_OK;
 }
 
 //! Get next byte from the file using temporary buffer
-viSerror elFileGetByte(bufManager_p buf_p, UInt8 *tmp) {
+elErrorCode_t elFileGetByte(bufManager_p buf_p, UInt8 *tmp) {
 
-    viSerror err = VIS_OK;
+    elErrorCode_t err = EL_OK;
 
 	if (buf_p->bc >= buf_p->max) { 		// Test if buffer is empty
 	    buf_p->bc = 0 ; 		 	// Signal buffer is getting loaded
@@ -310,11 +309,11 @@ viSerror elFileGetByte(bufManager_p buf_p, UInt8 *tmp) {
       		/* Read a new buffer from the file */
 			buf_p->max = fread(buf_p->buf,1,SCAN_BUFFER_SIZE*sizeof(UInt8),buf_p->fp);
       		if (buf_p->max != SCAN_BUFFER_SIZE*sizeof(UInt8)) {
-   			    DB_L1(" elFileGetByte::End of File detected, buf_p->max = %ld\n",buf_p->max);
+   			    DB_L1(" elFileGetByte::End of File detected, buf_p->max = %d\n",buf_p->max);
 			}
     	}
     	else // we reached the end of the file
-      		return VIS_EOF;
+      		return EL_EOF;
   	}
    *tmp = buf_p->buf[buf_p->bc];
 #if 0
@@ -332,9 +331,9 @@ viSerror elFileGetByte(bufManager_p buf_p, UInt8 *tmp) {
 	return err;
 }
 //! Get next byte from the file using temporary buffer
-viSerror elFileGetWord(bufManager_p buf_p, UInt32 *tmWord) {
+elErrorCode_t elFileGetWord(bufManager_p buf_p, UInt32 *tmWord) {
 
-    viSerror err = VIS_OK;
+    elErrorCode_t err = EL_OK;
     UInt8 tmByte;
 
     err = elFileGetByte(buf_p, &tmByte);
@@ -365,9 +364,9 @@ viSerror elFileGetWord(bufManager_p buf_p, UInt32 *tmWord) {
 	return err;
 }
 
-viSerror elFileGetNextStartCode(bufManager_p buf_p, UInt8 *pTmp, UInt32 *nbBytes) {
+elErrorCode_t elFileGetNextStartCode(bufManager_p buf_p, UInt8 *pTmp, UInt32 *nbBytes) {
 
-    viSerror err = VIS_OK;
+    elErrorCode_t err = EL_OK;
   	UInt8 tmp0=1;  		      /* current byte */
   	UInt8 tmp1=1;		      /* previous byte */
   	UInt8 tmp2=1;		      /* previous previous byte */
@@ -380,7 +379,7 @@ viSerror elFileGetNextStartCode(bufManager_p buf_p, UInt8 *pTmp, UInt32 *nbBytes
 		tmp1 = tmp0;
   		/* Read a byte from the input buffer */
 		err = elFileGetByte(buf_p, &tmp0);
-		if (err == VIS_EOF) {
+		if (err == EL_EOF) {
 		    return err;
 		}
 		count++;
@@ -395,9 +394,9 @@ viSerror elFileGetNextStartCode(bufManager_p buf_p, UInt8 *pTmp, UInt32 *nbBytes
 	return err;
 }
 
-viSerror elFileGetStreamPosition(bufManager_p buf_p, UInt32 *tmp){
+elErrorCode_t elFileGetStreamPosition(bufManager_p buf_p, UInt32 *tmp){
 
-    viSerror err = VIS_OK;
+    elErrorCode_t err = EL_OK;
 
 	*tmp = ftell(buf_p->fp) - SCAN_BUFFER_SIZE + (buf_p->bc);
 	return err;
@@ -411,15 +410,15 @@ init_bits() {
 }
 #endif
 
-viSerror read_bits(bufManager_p buf_p, Int32 a, UInt32 *val32) {
-    viSerror err = VIS_OK;
+elErrorCode_t read_bits(bufManager_p buf_p, Int32 a, UInt32 *val32) {
+    elErrorCode_t err = EL_OK;
     Int32 ra, rb;
     UInt32 tmp;
 
   ra = buf_p->avail_bits - a;
   rb = a - buf_p->avail_bits;
-  DB_L1("ra = %ld\n",ra);
-  DB_L1("rb = %ld\n",rb);
+  DB_L1("ra = %d\n",ra);
+  DB_L1("rb = %d\n",rb);
   if (buf_p->avail_bits == a) {
     *val32 = buf_p->word;
     err = elFileGetWord(buf_p,&buf_p->word);
@@ -427,11 +426,11 @@ viSerror read_bits(bufManager_p buf_p, Int32 a, UInt32 *val32) {
     buf_p->mask = 0xffffffff;
   }
   else if (ra > 0) {
-    DB_L1("buf_p->word = 0x%08lx\n",buf_p->word);
-    DB_L1("buf_p->mask = 0x%08lx\n",buf_p->mask);
-    DB_L1("buf_p->avail_bits = %ld\n",buf_p->avail_bits);
+    DB_L1("buf_p->word = 0x%08x\n",buf_p->word);
+    DB_L1("buf_p->mask = 0x%08x\n",buf_p->mask);
+    DB_L1("buf_p->avail_bits = %d\n",buf_p->avail_bits);
     *val32 = buf_p->word >> ra;
-    DB_L1("*val32 = 0x%08lx\n",*val32);
+    DB_L1("*val32 = 0x%08x\n",*val32);
     buf_p->mask = buf_p->mask >> a;
     buf_p->word = buf_p->word & buf_p->mask;
     buf_p->avail_bits -= a;
@@ -501,9 +500,9 @@ int read_exp() {
 #endif
 
 
-viSerror  elFileGetExpGolomb(bufManager_p buf_p, UInt32 *val32) {
+elErrorCode_t  elFileGetExpGolomb(bufManager_p buf_p, UInt32 *val32) {
 
-  viSerror err = VIS_OK;
+  elErrorCode_t err = EL_OK;
   UInt32 test;
   Int32 len, tmp;
 
@@ -515,8 +514,8 @@ viSerror  elFileGetExpGolomb(bufManager_p buf_p, UInt32 *val32) {
   }
   test = 1 << (buf_p->avail_bits - 1);
   len = 0;
-  DB_L1("test = 0x%08lx\n",test);
-  DB_L1("buf_p->word = 0x%08lx\n",buf_p->word);
+  DB_L1("test = 0x%08x\n",test);
+  DB_L1("buf_p->word = 0x%08x\n",buf_p->word);
   if (buf_p->word&test) {
     *val32 = 0;
     buf_p->avail_bits--;
@@ -532,15 +531,15 @@ viSerror  elFileGetExpGolomb(bufManager_p buf_p, UInt32 *val32) {
   }
   else {
     while (!(buf_p->word&test)) {
-      DB_L1("buf_p->mask = 0x%08lx\n",buf_p->mask);
-      DB_L1("buf_p->word = 0x%08lx\n",buf_p->word);
-      DB_L1("test        = 0x%08lx\n",test);
+      DB_L1("buf_p->mask = 0x%08x\n",buf_p->mask);
+      DB_L1("buf_p->word = 0x%08x\n",buf_p->word);
+      DB_L1("test        = 0x%08x\n",test);
       test = test >> 1;
       buf_p->mask = buf_p->mask>>1;
       len++;
       buf_p->avail_bits--;
-      DB_L1("len = %ld\n",len);
-      DB_L1("buf_p->avail_bits = %ld\n",buf_p->avail_bits);
+      DB_L1("len = %d\n",len);
+      DB_L1("buf_p->avail_bits = %d\n",buf_p->avail_bits);
       if (!buf_p->avail_bits) {
         err = elFileGetWord(buf_p,&buf_p->word);
         test = 0x80000000;
@@ -548,11 +547,11 @@ viSerror  elFileGetExpGolomb(bufManager_p buf_p, UInt32 *val32) {
       }
     }
 //    buf_p->word  = buf_p->word&(~test);
-    DB_L1("buf_p->word = 0x%08lx\n",buf_p->word);
-    DB_L1("buf_p->mask = 0x%08lx\n",buf_p->mask);
-    DB_L1("test        = 0x%08lx\n",test);
+    DB_L1("buf_p->word = 0x%08x\n",buf_p->word);
+    DB_L1("buf_p->mask = 0x%08x\n",buf_p->mask);
+    DB_L1("test        = 0x%08x\n",test);
     if (buf_p->avail_bits-(len+1) < 0) {
-        DB_L1("((len+1)-buf_p->avail_bits) = %ld\n",((len+1)-buf_p->avail_bits));
+        DB_L1("((len+1)-buf_p->avail_bits) = %d\n",((len+1)-buf_p->avail_bits));
         tmp = (len+1)-buf_p->avail_bits;
         *val32 = buf_p->word<<(tmp);
         err = elFileGetWord(buf_p,&buf_p->word);
@@ -578,9 +577,9 @@ viSerror  elFileGetExpGolomb(bufManager_p buf_p, UInt32 *val32) {
   return err;
 }
 
-viSerror  elFileGetSignedExpGolomb(bufManager_p buf_p, UInt32 *val32) {
+elErrorCode_t  elFileGetSignedExpGolomb(bufManager_p buf_p, UInt32 *val32) {
 
-  viSerror err = VIS_OK;
+  elErrorCode_t err = EL_OK;
   UInt32 test, k;
   Int32 len, tmp;
 
@@ -664,9 +663,9 @@ viSerror  elFileGetSignedExpGolomb(bufManager_p buf_p, UInt32 *val32) {
   return err;
 }
 
-viSerror elFileSetStreamPosition(bufManager_p buf_p, UInt32 tmp){
+elErrorCode_t elFileSetStreamPosition(bufManager_p buf_p, UInt32 tmp){
 
-    viSerror err = VIS_OK;
+    elErrorCode_t err = EL_OK;
 
   	/* Position the file */
 	fseek(buf_p->fp,tmp,SEEK_SET);
@@ -675,9 +674,9 @@ viSerror elFileSetStreamPosition(bufManager_p buf_p, UInt32 tmp){
 	return err;
 }
 
-viSerror parseSPS(bufManager_p buf_p, seqParSet_p sps_p) {
+elErrorCode_t parseSPS(bufManager_p buf_p, seqParSet_p sps_p) {
 
-    viSerror err = VIS_OK;
+    elErrorCode_t err = EL_OK;
     UInt8    tmByte;
     UInt32   tmWord;
     Int      i;
@@ -774,9 +773,9 @@ viSerror parseSPS(bufManager_p buf_p, seqParSet_p sps_p) {
 	return err;
 }
 
-viSerror elFileScan(session_p pSes)
+elErrorCode_t elFileScan(session_p pSes)
 {
-    viSerror err = VIS_OK;
+    elErrorCode_t err = EL_OK;
   	UInt8 tmByte = 0;  		/* current byte */
     UInt32 nbBytes;
     Int32  nbPictures;
@@ -788,7 +787,7 @@ viSerror elFileScan(session_p pSes)
 	/* Search a limited amount of bytes
 	while ((pbufMan->byteCounter < SCAN_LIMIT)&&(nbStartCodes < MIN_SC_FOUND)) { */
     nbPictures = 0;
-	while ((nbPictures < pSes->nbPictures)&(err != VIS_EOF)) {
+	while ((nbPictures < pSes->nbPictures)&(err != EL_EOF)) {
 #if 0
         if (copy == True) {
             dbgLevel = 0;
@@ -884,7 +883,7 @@ int main(int argc, char **argv)
 
 	if ((fpRead=fopen(ReadName,"rb"))==NULL) {
 		printf("error : cannot open %s\n",ReadName);
-		return(VIS_ERR_OPEN_FILE);
+		return(EL_ERR_OPEN_FILE);
 	}
     ses.width       = 176;
     ses.height      = 144;
@@ -908,13 +907,13 @@ int main(int argc, char **argv)
 #ifdef FILE_OUTPUT
 	if ((fpWrite=fopen(WriteName,"wb"))==NULL) {
 		printf("error : cannot open %s\n",WriteName);
-		return(VIS_ERR_OPEN_FILE);
+		return(EL_ERR_OPEN_FILE);
 	}
 #endif
 #if 0
 	if ((fpWrite_bin=fopen(WriteName_bin,"wb"))==NULL) {
 		printf("error : cannot open %s\n",WriteName_bin);
-		return(VIS_ERR_OPEN_FILE);
+		return(EL_ERR_OPEN_FILE);
 	}
 #endif
 
@@ -924,7 +923,7 @@ int main(int argc, char **argv)
     ses.bufMan.fp = fopen(ReadName, "rb");
     if (!ses.bufMan.fp) {
 		printf("error : cannot open %s\n",ReadName);
-        return VIS_ERR_OPEN_FILE;
+        return EL_ERR_OPEN_FILE;
     }
     else {
 #if 0
