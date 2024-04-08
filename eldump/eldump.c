@@ -13,7 +13,7 @@
 // and user's customers, employees, agents, transferees, successors,
 // and assigns.
 //
-// viSystems Research and Development does not represent or warrant that
+// Electropix Research and Development does not represent or warrant that
 // the programs furnished hereunder are free of infringement of any
 // third-party patents.
 //					
